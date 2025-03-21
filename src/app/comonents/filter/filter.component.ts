@@ -12,11 +12,12 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Dropdown } from '../models/general.model';
-import { GeneralDataService } from '../services/general-data.service';
-import { setFilters, clearFilters } from '../store/filter.action';
-import { selectAllFilters } from '../store/filter.selection';
+
 import { Store } from '@ngrx/store';
+import { Dropdown } from '../../models/general.model';
+import { GeneralDataService } from '../../services/general-data.service';
+import { setFilters, clearFilters } from '../../store/filter.action';
+import { selectAllFilters } from '../../store/filter.selection';
 
 @Component({
   selector: 'app-filter',

@@ -9,10 +9,11 @@ import { HeaderComponent } from '../../comonents/header/header.component';
 import { Router } from '@angular/router';
 import { GeneralDataService } from '../../services/general-data.service';
 import { TaskService } from '../../services/tasks.service';
-import { FilterComponent } from '../../filter/filter.component';
+
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeorgianDatePipe } from '../../pipes/georgian-date.pipe';
+import { FilterComponent } from '../../comonents/filter/filter.component';
 
 @Component({
   selector: 'app-home',
