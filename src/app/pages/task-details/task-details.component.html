@@ -1,0 +1,175 @@
+<app-header></app-header>
+
+<div class="grid-container">
+  <div class="task-info-container" *ngIf="task() as task">
+    <div class="task-card">
+      <div class="task-card-header">
+        <div class="meta-info-container">
+          <div
+            class="priority-container"
+            [ngStyle]="{ 'border-color': getPriorityColor(task.priority.id) }"
+            [ngStyle]="{ 'border-color': getPriorityColor(task.priority.id) }"
+          >
+            <img
+              [src]="task.priority.icon"
+              alt="priority icon"
+              class="priority-icon"
+            />
+            <p [ngStyle]="{ color: getPriorityColor(task.priority.id) }">
+              {{ task.priority.name }}
+            </p>
+          </div>
+          <p>
+            <span
+              [ngStyle]="{
+                'background-color': getDepartmentColor(task.department.id)
+              }"
+              class="department-container"
+              >{{ task.department.name }}</span
+            >
+          </p>
+        </div>
+
+        <h1>{{ task.name }}</h1>
+      </div>
+
+      <div class="task-card-info">
+        <p>{{ task.description }}</p>
+      </div>
+    </div>
+    <div class="task-details">
+      <h3>დავალების დეტალები</h3>
+      <div class="extra-info">
+        <div class="container-with-icon">
+          <ion-icon name="pie-chart-outline"></ion-icon>
+          <p>სტატუსი</p>
+        </div>
+
+        <div
+          class="dropdown-container"
+          #dropdownContainer
+          [class.open]="dropdownOpen"
+        >
+          <div class="custom-dropdown" (click)="toggleDropdown()" #dropdown>
+            <div class="selected-option">
+              {{ task.status.name }}
+            </div>
+            <ion-icon
+              name="chevron-down-outline"
+              [class.rotate]="dropdownOpen"
+            ></ion-icon>
+          </div>
+          <div class="dropdown-options" *ngIf="dropdownOpen" #dropdownOptions>
+            <div
+              *ngFor="let status of statuses()"
+              class="dropdown-item"
+              (click)="updateStatus(status.id)"
+            >
+              {{ status.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="extra-info">
+        <div class="container-with-icon">
+          <ion-icon name="calendar-clear-outline"></ion-icon>
+          <p>თანამშრომელი</p>
+        </div>
+        <div class="employee-info-container">
+          <img
+            [src]="task.employee.avatar"
+            alt="Employee Avatar"
+            class="employee-avatar"
+          />
+          <div class="employee-personal-info">
+            <p class="employee-dep">{{ task.employee.department.name }}</p>
+            <p class="employee-personal-info">
+              {{ task.employee.name }} {{ task.employee.surname }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="extra-info">
+        <div class="container-with-icon">
+          <ion-icon name="calendar-clear-outline"></ion-icon>
+          <p>დავალების ვადა</p>
+        </div>
+        <div class="date-container">
+          <p>{{ task.due_date | georgianDate : "day" }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="comments-container">
+    <!-- Input Section -->
+    <div class="comment-input-section">
+      <textarea
+        placeholder="დაწერეთ კომენტარი"
+        [(ngModel)]="newCommentText"
+      ></textarea>
+      <button class="submit-button" (click)="addComment()">
+        დააკომენატარე
+      </button>
+    </div>
+
+    <!-- Comments Header -->
+    <div class="comments-header">
+      <h3>კომენტარები</h3>
+
+      <p class="comment-count">{{ getTotalComments() }}</p>
+    </div>
+
+    <!-- Comments List -->
+    <div class="comments-list">
+      <div class="comment" *ngFor="let comment of comments()">
+        <div class="comment-author">
+          <img [src]="comment.author_avatar" alt="User Avatar" class="avatar" />
+          <div class="author-info">
+            <h4>{{ comment.author_nickname }}</h4>
+            <p class="comment-text">{{ comment.text }}</p>
+            <span class="reply-button" (click)="toggleReply(comment.id)">
+              <span>↳</span>
+              უპასუხე
+            </span>
+          </div>
+        </div>
+
+        <!-- Reply textarea (only for the selected comment) -->
+        <div *ngIf="replyingTo === comment.id" class="comment-input-section">
+          <textarea
+            [(ngModel)]="replyText"
+            placeholder="შეიყვანე პასუხი..."
+          ></textarea>
+          <button
+            (click)="submitReply(comment.id)"
+            [disabled]="!replyText.trim()"
+            class="submit-button"
+          >
+            დამატება
+          </button>
+        </div>
+
+        <!-- Render Replies (Only One Level Deep) -->
+        <div
+          class="comments-list replies"
+          *ngIf="comment.sub_comments && comment.sub_comments.length > 0"
+        >
+          <div *ngFor="let reply of comment.sub_comments" class="comment reply">
+            <div class="comment-author">
+              <img
+                [src]="reply.author_avatar"
+                alt="User Avatar"
+                class="avatar"
+              />
+              <div class="author-info">
+                <h4>{{ reply.author_nickname }}</h4>
+                <p class="comment-text">{{ reply.text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
