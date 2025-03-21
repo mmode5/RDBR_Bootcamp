@@ -1,0 +1,211 @@
+.container {
+  padding: 2.4rem 4.8rem;
+  h1 {
+    padding: 2.4rem 0;
+    font-size: 3.4rem;
+    font-weight: 600;
+    color: #212529;
+  }
+  .form {
+    color: #fbf9ffa6;
+    border: 0.3px solid #ddd2ff;
+    border-radius: 4px;
+    padding: 2rem;
+    padding-bottom: 20rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    column-gap: 2.4rem;
+    row-gap: 4.8rem;
+    .dropdown-container {
+      // width: 100% !important;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .label {
+        color: black;
+        font-size: 1.6rem;
+      }
+
+      .validation-messages {
+        color: #6c757d;
+        font-weight: 350;
+        font-size: 1rem;
+      }
+      .textarea {
+        height: 13.3rem;
+        resize: none;
+        border: none;
+        outline: none;
+      }
+      .dropdown-wrapper {
+        position: relative;
+      }
+      .custom-dropdown {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 300;
+        padding: 1.4rem;
+        border: 1px solid #ced4da;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%;
+        transition: all;
+        outline: none;
+
+        ion-icon {
+          color: #343a40;
+          transition: all;
+        }
+      }
+
+      &.open .custom-dropdown {
+        border-radius: 5px 5px 0 0;
+        border-bottom: none;
+        border-color: #8338ec;
+      }
+
+      &.open .custom-dropdown ion-icon {
+        transform: rotate(180deg);
+        color: #8338ec;
+      }
+      .selected-option {
+        color: #0d0f10;
+      }
+
+      .dropdown-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-top: none;
+        z-index: 1000;
+        border-radius: 0 0 5px 5px;
+        border-color: transparent;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+
+        transition: all;
+      }
+
+      &.open .dropdown-options {
+        max-height: 300px;
+        opacity: 1;
+        border-color: #8338ec;
+      }
+
+      .dropdown-item {
+        font-weight: 300;
+        padding: 1.2rem 1.4rem;
+        background-color: #fff;
+        color: black;
+
+        transition: all;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+      }
+    }
+  }
+}
+
+.side {
+  display: flex;
+  justify-content: space-between;
+  .dropdown-container {
+    width: 47%;
+  }
+}
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: "Arial", sans-serif;
+  width: 100%;
+  max-width: 300px;
+
+  label {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .date-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    border: 2px solid #d1d1d1;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+    transition: border-color 0.3s ease;
+
+    &:focus-within {
+      border-color: #7b2ff7;
+    }
+
+    .calendar-icon {
+      font-size: 18px;
+      color: #7b2ff7;
+    }
+
+    .date-input {
+      border: none;
+      outline: none;
+      font-size: 16px;
+      width: 100%;
+      color: #666;
+      background: transparent;
+
+      &::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+  grid-column: 2;
+}
+
+.create-task-btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #7b2ff7;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(123, 47, 247, 0.3);
+
+  &:hover {
+    background-color: #6200ea;
+  }
+
+  &:active {
+    background-color: #4b00c8;
+  }
+}
+
+.disabled {
+  color: #adb5bd !important;
+}

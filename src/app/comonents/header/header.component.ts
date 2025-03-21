@@ -14,8 +14,11 @@ export class HeaderComponent {
   constructor(private router: Router) {}
 
   navigateToHome(): void {
-    if (this.router.url !== '/landing') {
-      this.router.navigate(['/landing']);
+    if (this.router.url !== '/home') {
+      this.router.navigate(['/home']);
     }
+  }
+  navigateToNewTask(): void {
+    this.router.navigate(['/new-task']);
   }
 }

@@ -135,7 +135,6 @@ export class TaskDetailsComponent {
     this.replyText = '';
   }
 
-  // ✅ Submit a reply to a comment
   submitReply(commentId: number) {
     if (!this.replyText.trim()) return;
 

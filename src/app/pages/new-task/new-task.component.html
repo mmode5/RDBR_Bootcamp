@@ -1,0 +1,208 @@
+<app-header></app-header>
+
+<div class="container">
+  <h1>შექმენი ახალი დავალება</h1>
+  <form [formGroup]="taskForm" (ngSubmit)="createTask()" class="form">
+    <!-- სათაური -->
+    <div class="dropdown-container">
+      <label class="label">სათაური*</label>
+      <input formControlName="title" class="custom-dropdown" />
+      <div class="validation-messages">
+        <p
+          class="validation-text"
+          [ngStyle]="{
+            color:
+              taskForm.controls['title'].value?.length >= 3 ? 'green' : 'gray'
+          }"
+        >
+          მინიმუმ 3 სიმბოლო
+        </p>
+        <p
+          class="validation-text"
+          [ngStyle]="{
+            color:
+              taskForm.controls['title'].value?.length <= 255 &&
+              taskForm.controls['title'].value?.length > 0
+                ? 'green'
+                : 'gray'
+          }"
+        >
+          მაქსიმუმ 255 სიმბოლო
+        </p>
+      </div>
+    </div>
+
+    <!-- დეპარტამენტი -->
+    <div class="dropdown-container" [class.open]="isDropdownOpen('department')">
+      <label class="label">დეპარტამენტი*</label>
+      <div class="dropdown-wrapper">
+        <div class="custom-dropdown" (click)="toggleDropdown('department')">
+          <div class="selected-option">
+            {{
+              taskForm.get("department")?.value?.name || "აირჩიეთ დეპარტამენტი"
+            }}
+          </div>
+          <ion-icon
+            name="chevron-down-outline"
+            [class.rotate]="isDropdownOpen('department')"
+          ></ion-icon>
+        </div>
+        <div class="dropdown-options" *ngIf="isDropdownOpen('department')">
+          <div
+            *ngFor="let department of departments()"
+            class="dropdown-item"
+            (click)="updateSelection('department', department.id)"
+          >
+            {{ department.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- აღწერა -->
+    <div class="dropdown-container">
+      <label class="label">აღწერა</label>
+      <textarea
+        formControlName="description"
+        class="custom-dropdown textarea"
+      ></textarea>
+      <div class="validation-messages">
+        <p
+          class="validation-text"
+          [ngStyle]="{
+            color:
+              descriptionHasMinWords() &&
+              taskForm.controls['description'].value?.length > 0
+                ? 'green'
+                : 'gray'
+          }"
+        >
+          მინიმუმ 4 სიტყვა
+        </p>
+        <p
+          class="validation-text"
+          [ngStyle]="{
+            color:
+              taskForm.controls['description'].value?.length <= 255 &&
+              taskForm.controls['description'].value?.length > 0
+                ? 'green'
+                : 'gray'
+          }"
+        >
+          მაქსიმუმ 255 სიმბოლო
+        </p>
+      </div>
+    </div>
+
+    <!-- თანამშრომელი -->
+    <div class="dropdown-container" [class.open]="isDropdownOpen('employee')">
+      <label class="label" [class.disabled]="!taskForm.get('department')?.value"
+        >პასუხისმგებელი თანამშრომელი*</label
+      >
+      <div class="dropdown-wrapper">
+        <div class="custom-dropdown" (click)="toggleDropdown('employee')">
+          <div class="selected-option">
+            {{
+              taskForm.get("employee")?.value?.name || "აირჩიეთ თანამშრომელი"
+            }}
+          </div>
+          <ion-icon
+            name="chevron-down-outline"
+            [class.rotate]="isDropdownOpen('employee')"
+          ></ion-icon>
+        </div>
+        <div class="dropdown-options" *ngIf="isDropdownOpen('employee')">
+          <div
+            *ngFor="let employee of filteredEmployees()"
+            class="dropdown-item"
+            (click)="updateSelection('employee', employee.id)"
+          >
+            {{ employee.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <!-- სტატუსი  -->
+      <div class="dropdown-container" [class.open]="isDropdownOpen('status')">
+        <label class="label">აირჩიეთ*</label>
+
+        <div class="dropdown-wrapper">
+          <div class="custom-dropdown" (click)="toggleDropdown('status')">
+            <div class="selected-option">
+              {{ taskForm.get("status")?.value?.name || "აირჩიეთ სტატუსი" }}
+            </div>
+            <ion-icon
+              name="chevron-down-outline"
+              [class.rotate]="isDropdownOpen('status')"
+            ></ion-icon>
+          </div>
+          <div class="dropdown-options" *ngIf="isDropdownOpen('status')">
+            <div
+              *ngFor="let status of statuses()"
+              class="dropdown-item"
+              (click)="updateSelection('status', status.id)"
+            >
+              {{ status.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- პრიორიტეტი -->
+      <div class="dropdown-container" [class.open]="isDropdownOpen('priority')">
+        <label class="label">პრიორიტეტი*</label>
+        <div class="dropdown-wrapper">
+          <div class="custom-dropdown" (click)="toggleDropdown('priority')">
+            <div class="selected-option">
+              {{
+                taskForm.get("priority")?.value?.name || "აირჩიეთ პრიორიტეტი"
+              }}
+            </div>
+            <ion-icon
+              name="chevron-down-outline"
+              [class.rotate]="isDropdownOpen('priority')"
+            ></ion-icon>
+          </div>
+          <div class="dropdown-options" *ngIf="isDropdownOpen('priority')">
+            <div
+              *ngFor="let priority of priorities()"
+              class="dropdown-item"
+              (click)="updateSelection('priority', priority.id)"
+            >
+              {{ priority.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- კალენდარი -->
+    <div class="date-picker-container">
+      <label for="dateField">თარიღი</label>
+      <div class="date-input-wrapper">
+        <span class="calendar-icon" (click)="openCalendar()">📅</span>
+        <input
+          type="date"
+          id="dateField"
+          class="date-input"
+          placeholder="DD/MM/YYYY"
+          formControlName="due_date"
+          [min]="minDate"
+          (change)="updateDate($event)"
+          #dateInput
+          required
+        />
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button
+        type="submit"
+        class="create-task-btn"
+        [disabled]="taskForm.invalid"
+      >
+        დავალების შექმნა
+      </button>
+    </div>
+  </form>
+</div>
